@@ -14,6 +14,7 @@ const UploadForm = ()=>{
         // console.log(selected);
         if(selected && types.includes(selected.type)){
             setFile(selected);
+            setError('')
         }else{
             setFile(null);
             setError('Error : Please select a valid file type to be uploaded (png, jpeg, gif)');
