@@ -7,6 +7,7 @@ const Gallery = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [fullscreenImage, setFullscreenImage] = useState(null);
+  const [deleteMode, setDeleteMode] = useState(false);
 
   const handleFileUpload = (files) => {
     const newImages = files.map((file) => ({
@@ -18,14 +19,19 @@ const Gallery = () => {
     setUploadedImages([...uploadedImages, ...newImages]);
   };
 
-  const handleDelete = () => {
+  const handleDeleteSelected = () => {
     const updatedImages = uploadedImages.filter((image) => !selectedImages.includes(image.id));
     setUploadedImages(updatedImages);
     setSelectedImages([]);
+    setDeleteMode(false);
   };
 
   const handleImageClick = (image) => {
-    setFullscreenImage(image);
+    if (deleteMode) {
+      handleCheckboxChange(image.id);
+    } else {
+      setFullscreenImage(image);
+    }
   };
 
   const handleCloseFullscreen = () => {
@@ -42,30 +48,47 @@ const Gallery = () => {
     });
   };
 
+  const handleSelectAll = () => {
+    setSelectedImages(uploadedImages.map((image) => image.id));
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedImages([]);
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Image Gallery</h1>
       <FileUpload onFileUpload={handleFileUpload} />
 
-      {/* Delete Selected Button */}
-      {selectedImages.length > 0 && (
+      {/* Delete Buttons */}
+      {deleteMode ? (
         <div className="mb-4">
-          <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded">
+          <button onClick={handleDeleteSelected} className="bg-red-500 text-white px-4 py-2 rounded mr-4">
             Delete Selected
           </button>
+          <button onClick={() => setDeleteMode(false)} className="bg-gray-500 text-white px-4 py-2 rounded">
+            Cancel
+          </button>
         </div>
+      ) : (
+        <button onClick={() => setDeleteMode(true)} className="bg-blue-500 text-white px-4 py-2 rounded mb-4">
+          Delete
+        </button>
       )}
 
       <div className="grid grid-cols-3 gap-4">
         {uploadedImages.map((image) => (
           <div key={image.id} className="relative group">
             <Image src={image.src} alt={image.alt} onClick={() => handleImageClick(image)} />
-            <input
-              type="checkbox"
-              onChange={() => handleCheckboxChange(image.id)}
-              checked={selectedImages.includes(image.id)}
-              className="absolute top-2 left-2"
-            />
+            {deleteMode && (
+              <input
+                type="checkbox"
+                onChange={() => handleCheckboxChange(image.id)}
+                checked={selectedImages.includes(image.id)}
+                className="absolute top-2 left-2"
+              />
+            )}
           </div>
         ))}
       </div>
