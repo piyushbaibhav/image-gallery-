@@ -1,4 +1,4 @@
-// Gallery.js
+
 import React, { useState } from 'react';
 import Image from './Image';
 import FileUpload from './FileUpload';
@@ -7,15 +7,24 @@ const Gallery = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [deleteMode, setDeleteMode] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleFileUpload = (files) => {
-    const newImages = files.map((file) => ({
+    const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    
+    if (imageFiles.length === 0) {
+      setErrorMessage('Please select valid image files.');
+      return;
+    }
+
+    const newImages = imageFiles.map((file) => ({
       id: Math.random().toString(36).substring(7),
       src: URL.createObjectURL(file),
       alt: file.name,
     }));
 
     setUploadedImages([...uploadedImages, ...newImages]);
+    setErrorMessage('');
   };
 
   const handleDeleteSelected = () => {
@@ -55,20 +64,26 @@ const Gallery = () => {
 
   return (
     <div className="container mx-auto p-4 bg-gradient-to-r from-blue-300 to-blue-500 rounded-md shadow-lg">
-      <h1 className="text-4xl font-extrabold text-center text-white mb-8">Image Gallery</h1>
+      <h1 className="text-4xl font-extrabold text-center text-white mb-8">Piyush's Image Gallery</h1>
 
       <FileUpload onFileUpload={handleFileUpload} className="w-full mb-4" />
+
+      {errorMessage && (
+        <div className="bg-red-600 text-white px-4 py-2 rounded mb-4">
+          {errorMessage}
+        </div>
+      )}
 
       {/* Delete Buttons */}
       {deleteMode ? (
         <div className="mb-4 flex flex-col sm:flex-row">
           <button
             onClick={handleDeleteSelected}
-            className="bg-red-500 text-white px-4 py-2 rounded mb-2 sm:mb-0 sm:mr-4 mt-4"
+            className="bg-red-600 text-white px-4 py-2 rounded mb-2 sm:mb-0 sm:mr-4 mt-4"
           >
             Delete Selected
           </button>
-          <button onClick={() => setDeleteMode(false)} className="bg-gray-500 text-white px-4 py-2 rounded mt-4">
+          <button onClick={() => setDeleteMode(false)} className="bg-gray-900 text-white px-4 py-2 rounded mt-4">
             Cancel
           </button>
           <button onClick={handleSelectAll} className="bg-green-500 text-white px-4 py-2 rounded ml-2 mt-4">
