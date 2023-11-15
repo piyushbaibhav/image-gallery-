@@ -52,12 +52,15 @@ const Gallery = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Image Gallery</h1>
-      <FileUpload onFileUpload={handleFileUpload} />
+      <FileUpload onFileUpload={handleFileUpload} className="w-full mb-4" />
 
       {/* Delete Buttons */}
       {deleteMode ? (
-        <div className="mb-4">
-          <button onClick={handleDeleteSelected} className="bg-red-500 text-white px-4 py-2 rounded mr-4">
+        <div className="mb-4 flex flex-col sm:flex-row">
+          <button
+            onClick={handleDeleteSelected}
+            className="bg-red-500 text-white px-4 py-2 rounded mb-2 sm:mb-0 sm:mr-4"
+          >
             Delete Selected
           </button>
           <button onClick={() => setDeleteMode(false)} className="bg-gray-500 text-white px-4 py-2 rounded">
@@ -70,10 +73,10 @@ const Gallery = () => {
         </button>
       )}
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {uploadedImages.map((image) => (
           <div key={image.id} className="relative group">
-            <Image src={image.src} alt={image.alt} onClick={() => handleImageClick(image)} />
+            <Image src={image.src} alt={image.alt} onClick={() => handleImageClick(image)} className="w-full" />
             {deleteMode && (
               <input
                 type="checkbox"
