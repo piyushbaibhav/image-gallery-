@@ -8,7 +8,7 @@ const Gallery = () => {
 
   const handleFileUpload = (files) => {
     const newImages = files.map((file) => ({
-      id: Math.random().toString(36).substring(7), 
+      id: Math.random().toString(36).substring(7),
       src: URL.createObjectURL(file),
       alt: file.name,
     }));
@@ -27,11 +27,11 @@ const Gallery = () => {
       <FileUpload onFileUpload={handleFileUpload} />
       <div className="grid grid-cols-3 gap-4">
         {uploadedImages.map((image) => (
-          <div key={image.id} className="relative">
+          <div key={image.id} className="relative group">
             <Image src={image.src} alt={image.alt} />
             <button
               onClick={() => handleDelete(image.id)}
-              className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full cursor-pointer"
+              className="absolute bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 bg-red-500 text-white p-2 rounded-full group-hover:opacity-100 transition-opacity duration-300"
             >
               Delete
             </button>
