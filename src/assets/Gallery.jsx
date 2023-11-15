@@ -27,11 +27,11 @@ const Gallery = () => {
 
   const handleImageClick = (image) => {
     if (deleteMode) {
-      handleCheckboxChange(image.id);
+      toggleImageSelection(image.id);
     }
   };
 
-  const handleCheckboxChange = (imageId) => {
+  const toggleImageSelection = (imageId) => {
     setSelectedImages((prevSelectedImages) => {
       if (prevSelectedImages.includes(imageId)) {
         return prevSelectedImages.filter((id) => id !== imageId);
@@ -39,6 +39,10 @@ const Gallery = () => {
         return [...prevSelectedImages, imageId];
       }
     });
+  };
+
+  const handleCheckboxChange = (imageId) => {
+    toggleImageSelection(imageId);
   };
 
   const handleSelectAll = () => {
@@ -66,6 +70,9 @@ const Gallery = () => {
           <button onClick={() => setDeleteMode(false)} className="bg-gray-500 text-white px-4 py-2 rounded">
             Cancel
           </button>
+          <button onClick={handleSelectAll} className="bg-green-500 text-white px-4 py-2 rounded ml-2">
+            Select All
+          </button>
         </div>
       ) : (
         <button onClick={() => setDeleteMode(true)} className="bg-blue-500 text-white px-4 py-2 rounded mb-4">
@@ -75,8 +82,8 @@ const Gallery = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {uploadedImages.map((image) => (
-          <div key={image.id} className="relative group">
-            <Image src={image.src} alt={image.alt} onClick={() => handleImageClick(image)} className="w-full" />
+          <div key={image.id} className="relative group" onClick={() => handleImageClick(image)}>
+            <Image src={image.src} alt={image.alt} className="w-full" />
             {deleteMode && (
               <input
                 type="checkbox"
