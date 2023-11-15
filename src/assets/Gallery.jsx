@@ -6,7 +6,6 @@ import FileUpload from './FileUpload';
 const Gallery = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [fullscreenImage, setFullscreenImage] = useState(null);
   const [deleteMode, setDeleteMode] = useState(false);
 
   const handleFileUpload = (files) => {
@@ -29,13 +28,7 @@ const Gallery = () => {
   const handleImageClick = (image) => {
     if (deleteMode) {
       handleCheckboxChange(image.id);
-    } else {
-      setFullscreenImage(image);
     }
-  };
-
-  const handleCloseFullscreen = () => {
-    setFullscreenImage(null);
   };
 
   const handleCheckboxChange = (imageId) => {
@@ -92,20 +85,6 @@ const Gallery = () => {
           </div>
         ))}
       </div>
-
-      {fullscreenImage && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
-          <div className="relative">
-            <Image src={fullscreenImage.src} alt={fullscreenImage.alt} className="max-h-80" />
-            <button
-              onClick={handleCloseFullscreen}
-              className="absolute top-4 right-4 text-white text-3xl cursor-pointer"
-            >
-              &#10005;
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
