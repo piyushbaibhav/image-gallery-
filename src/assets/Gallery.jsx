@@ -18,13 +18,13 @@ const Gallery = () => {
   };
 
   const handleDelete = (id) => {
-    const updatedImages = uploadedImages.filter((image) => image.id !== id);
-    setUploadedImages(updatedImages);
-
-    // Close the fullscreen display if the deleted image was selected
+    // Check if the deleted image is the currently displayed image
     if (selectedImage && selectedImage.id === id) {
       setSelectedImage(null);
     }
+
+    const updatedImages = uploadedImages.filter((image) => image.id !== id);
+    setUploadedImages(updatedImages);
   };
 
   const handleImageClick = (image) => {
@@ -55,10 +55,10 @@ const Gallery = () => {
       {selectedImage && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
           <div className="relative">
-            <Image src={selectedImage.src} alt={selectedImage.alt} />
+            <Image src={selectedImage.src} alt={selectedImage.alt} className="max-h-80" />
             <button
               onClick={handleCloseFullscreen}
-              className="absolute top-2 right-2 text-white text-2xl cursor-pointer"
+              className="absolute top-4 right-4 text-white text-3xl cursor-pointer"
             >
               &#10005;
             </button>
