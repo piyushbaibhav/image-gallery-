@@ -5,6 +5,7 @@ import FileUpload from './FileUpload';
 
 const Gallery = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFileUpload = (files) => {
     const newImages = files.map((file) => ({
@@ -19,6 +20,19 @@ const Gallery = () => {
   const handleDelete = (id) => {
     const updatedImages = uploadedImages.filter((image) => image.id !== id);
     setUploadedImages(updatedImages);
+
+    // Close the fullscreen display if the deleted image was selected
+    if (selectedImage && selectedImage.id === id) {
+      setSelectedImage(null);
+    }
+  };
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+  };
+
+  const handleCloseFullscreen = () => {
+    setSelectedImage(null);
   };
 
   return (
@@ -27,7 +41,7 @@ const Gallery = () => {
       <FileUpload onFileUpload={handleFileUpload} />
       <div className="grid grid-cols-3 gap-4">
         {uploadedImages.map((image) => (
-          <div key={image.id} className="relative group">
+          <div key={image.id} className="relative group" onClick={() => handleImageClick(image)}>
             <Image src={image.src} alt={image.alt} />
             <button
               onClick={() => handleDelete(image.id)}
@@ -38,6 +52,19 @@ const Gallery = () => {
           </div>
         ))}
       </div>
+      {selectedImage && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
+          <div className="relative">
+            <Image src={selectedImage.src} alt={selectedImage.alt} />
+            <button
+              onClick={handleCloseFullscreen}
+              className="absolute top-2 right-2 text-white text-2xl cursor-pointer"
+            >
+              &#10005;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
