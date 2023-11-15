@@ -54,8 +54,9 @@ const Gallery = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Image Gallery</h1>
+    <div className="container mx-auto p-4 bg-gradient-to-r from-blue-300 to-blue-500 rounded-md shadow-lg">
+      <h1 className="text-4xl font-extrabold text-center text-white mb-8">Image Gallery</h1>
+
       <FileUpload onFileUpload={handleFileUpload} className="w-full mb-4" />
 
       {/* Delete Buttons */}
@@ -63,19 +64,19 @@ const Gallery = () => {
         <div className="mb-4 flex flex-col sm:flex-row">
           <button
             onClick={handleDeleteSelected}
-            className="bg-red-500 text-white px-4 py-2 rounded mb-2 sm:mb-0 sm:mr-4"
+            className="bg-red-500 text-white px-4 py-2 rounded mb-2 sm:mb-0 sm:mr-4 mt-4"
           >
             Delete Selected
           </button>
-          <button onClick={() => setDeleteMode(false)} className="bg-gray-500 text-white px-4 py-2 rounded">
+          <button onClick={() => setDeleteMode(false)} className="bg-gray-500 text-white px-4 py-2 rounded mt-4">
             Cancel
           </button>
-          <button onClick={handleSelectAll} className="bg-green-500 text-white px-4 py-2 rounded ml-2">
+          <button onClick={handleSelectAll} className="bg-green-500 text-white px-4 py-2 rounded ml-2 mt-4">
             Select All
           </button>
         </div>
       ) : (
-        <button onClick={() => setDeleteMode(true)} className="bg-blue-500 text-white px-4 py-2 rounded mb-4">
+        <button onClick={() => setDeleteMode(true)} className="bg-blue-500 text-white px-4 py-2 rounded mb-4 mt-4">
           Delete
         </button>
       )}
