@@ -5,7 +5,8 @@ import FileUpload from './FileUpload';
 
 const Gallery = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [fullscreenImage, setFullscreenImage] = useState(null);
 
   const handleFileUpload = (files) => {
     const newImages = files.map((file) => ({
@@ -17,45 +18,62 @@ const Gallery = () => {
     setUploadedImages([...uploadedImages, ...newImages]);
   };
 
-  const handleDelete = (id) => {
-    // Check if the deleted image is the currently displayed image
-    if (selectedImage && selectedImage.id === id) {
-      setSelectedImage(null);
-    }
-
-    const updatedImages = uploadedImages.filter((image) => image.id !== id);
+  const handleDelete = () => {
+    const updatedImages = uploadedImages.filter((image) => !selectedImages.includes(image.id));
     setUploadedImages(updatedImages);
+    setSelectedImages([]);
   };
 
   const handleImageClick = (image) => {
-    setSelectedImage(image);
+    setFullscreenImage(image);
   };
 
   const handleCloseFullscreen = () => {
-    setSelectedImage(null);
+    setFullscreenImage(null);
+  };
+
+  const handleCheckboxChange = (imageId) => {
+    setSelectedImages((prevSelectedImages) => {
+      if (prevSelectedImages.includes(imageId)) {
+        return prevSelectedImages.filter((id) => id !== imageId);
+      } else {
+        return [...prevSelectedImages, imageId];
+      }
+    });
   };
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Image Gallery</h1>
       <FileUpload onFileUpload={handleFileUpload} />
+
+      {/* Delete Selected Button */}
+      {selectedImages.length > 0 && (
+        <div className="mb-4">
+          <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded">
+            Delete Selected
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-3 gap-4">
         {uploadedImages.map((image) => (
-          <div key={image.id} className="relative group" onClick={() => handleImageClick(image)}>
-            <Image src={image.src} alt={image.alt} />
-            <button
-              onClick={() => handleDelete(image.id)}
-              className="absolute bottom-2 left-1/2 transform -translate-x-1/2 opacity-0 bg-red-500 text-white p-2 rounded-full group-hover:opacity-100 transition-opacity duration-300"
-            >
-              Delete
-            </button>
+          <div key={image.id} className="relative group">
+            <Image src={image.src} alt={image.alt} onClick={() => handleImageClick(image)} />
+            <input
+              type="checkbox"
+              onChange={() => handleCheckboxChange(image.id)}
+              checked={selectedImages.includes(image.id)}
+              className="absolute top-2 left-2"
+            />
           </div>
         ))}
       </div>
-      {selectedImage && (
+
+      {fullscreenImage && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
           <div className="relative">
-            <Image src={selectedImage.src} alt={selectedImage.alt} className="max-h-80" />
+            <Image src={fullscreenImage.src} alt={fullscreenImage.alt} className="max-h-80" />
             <button
               onClick={handleCloseFullscreen}
               className="absolute top-4 right-4 text-white text-3xl cursor-pointer"
