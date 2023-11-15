@@ -1,14 +1,12 @@
 import React from 'react';
-import Title from './assets/Title';
-import UploadForm from './assets/FileUpload';
+import Gallery from './assets/Gallery';
 
-function App() {
+const App = () => {
   return (
-    <div className="max-w-960 mx-auto">
-      <Title/>
-      <UploadForm />
+    <div>
+      <Gallery />
     </div>
   );
-}
+};
 
 export default App;
