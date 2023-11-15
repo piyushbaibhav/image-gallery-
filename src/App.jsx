@@ -1,6 +1,6 @@
 import React from 'react';
 import Title from './assets/Title';
-import UploadForm from './assets/UploadForm';
+import UploadForm from './assets/FileUpload';
 
 function App() {
   return (
